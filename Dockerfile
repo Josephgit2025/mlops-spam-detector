@@ -1,5 +1,5 @@
 # Image de base légère
-FROM python:3.13-slim
+FROM python:3.11-slim
 
 # Dossier de travail dans le conteneur
 WORKDIR /app
