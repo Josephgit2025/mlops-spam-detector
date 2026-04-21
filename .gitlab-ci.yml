@@ -20,6 +20,7 @@ test_api:
   needs: [train_model]
   script:
     - pip install -r requirements.txt
+    - pip install pytest
     - python -m pytest tests/ -v
 
 build_image:
