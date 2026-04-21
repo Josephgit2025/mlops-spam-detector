@@ -1,0 +1,33 @@
+stages:
+  - train
+  - test
+  - build
+
+train_model:
+  stage: train
+  image: python:3.13-slim
+  script:
+    - pip install -r requirements.txt
+    - python src/train.py
+  artifacts:
+    paths:
+      - models/
+
+test_api:
+  stage: test
+  image: python:3.13-slim
+  needs: [train_model]
+  script:
+    - pip install -r requirements.txt
+    - python -m pytest tests/ -v
+
+build_image:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  needs: [test_api]
+  script:
+    - docker build -t spam-detector .
+  only:
+    - main
