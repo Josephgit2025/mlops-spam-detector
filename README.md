@@ -1,3 +1,6 @@
+ [![pipeline status](https://gitlab.com/Josephgit2025/mlops-spam-detector/badges/main/pipeline.svg)](https://gitlab.com/Josephgit2025/mlops-spam-detector/-/commits/main)
+
+
 # MLOps Spam Detector
 
 Pipeline MLOps complet de détection de spam par SMS.
