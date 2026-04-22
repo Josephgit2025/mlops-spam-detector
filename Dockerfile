@@ -10,12 +10,15 @@ COPY requirements.txt .
 # Installation des dépendances
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copie du code et du modèle
+# Copie du code, du modèle et du dataset
 COPY src/ ./src/
 COPY models/ ./models/
+COPY sms.tsv .
 
 # Port exposé
 EXPOSE 8000
 
-# Lancement de l'API
+# Par défaut, lance l'API
+# Pour entraîner le modèle : docker run spam-detector python src/train.py
+# Pour lancer l'API : docker run -p 8000:8000 spam-detector
 CMD ["uvicorn", "src.predict:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -6,12 +6,15 @@ from sklearn.metrics import accuracy_score, classification_report
 import mlflow
 import mlflow.sklearn
 import joblib
-import os
+from pathlib import Path
+
+# Chemin absolu vers la racine du projet
+BASE_DIR = Path(__file__).parent.parent
 
 # Chargement du dataset
-df = pd.read_csv("sms.tsv", sep="\t", header=None, names=["label", "text"])
+df = pd.read_csv(BASE_DIR / "sms.tsv", sep="\t", header=None, names=["label", "text"])
 
-# Encodage : spam = 1, ham = 0 car le modèle ne comprends pas les mots, raison de conversion
+# Encodage : spam = 1, ham = 0
 df["label"] = df["label"].map({"spam": 1, "ham": 0})
 
 # Séparation des données
@@ -43,8 +46,9 @@ with mlflow.start_run():
     mlflow.sklearn.log_model(model, "model")
 
 # Sauvegarde locale du modèle et du vectorizer
-os.makedirs("models", exist_ok=True)
-joblib.dump(model, "models/model.pkl")
-joblib.dump(vectorizer, "models/vectorizer.pkl")
+models_dir = BASE_DIR / "models"
+models_dir.mkdir(exist_ok=True)
+joblib.dump(model, models_dir / "model.pkl")
+joblib.dump(vectorizer, models_dir / "vectorizer.pkl")
 
 print("Modèle sauvegardé dans models/")

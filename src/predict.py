@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
+from pathlib import Path
+
+# Chemin absolu vers la racine du projet
+BASE_DIR = Path(__file__).parent.parent
 
 # Chargement du modèle et du vectorizer
-model = joblib.load("models/model.pkl")
-vectorizer = joblib.load("models/vectorizer.pkl")
+model = joblib.load(BASE_DIR / "models" / "model.pkl")
+vectorizer = joblib.load(BASE_DIR / "models" / "vectorizer.pkl")
 
 # Initialisation de l'API
 app = FastAPI(title="Spam Detector API")
