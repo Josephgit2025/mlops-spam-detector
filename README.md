@@ -223,17 +223,3 @@ le contenu textuel d'un SMS et prédire s'il est spam ou non.
   "confidence": 0.9064
 }
 ```
-
-## Licence
-MIT
-
-## Auteur
-Joseph - 2026# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
-# mlops-spam-detector
