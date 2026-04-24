@@ -228,4 +228,6 @@ le contenu textuel d'un SMS et prédire s'il est spam ou non.
 MIT
 
 ## Auteur
-Joseph - 2026
+Joseph - 2026# mlops-spam-detector
+# mlops-spam-detector
+# mlops-spam-detector
