@@ -2,6 +2,7 @@ stages:
   - train
   - test
   - build
+  - deploy
 
 train_model:
   stage: train
@@ -30,6 +31,21 @@ build_image:
     - docker:24-dind
   needs: [test_api]
   script:
-    - docker build -t spam-detector .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  needs: [build_image]
+  environment:
+    name: production
+    url: https://registry.gitlab.com/Josephgit2025/mlops-spam-detector
+  script:
+    - echo "Image deployée sur le registry GitLab"
+    - echo "Image disponible à $CI_REGISTRY_IMAGE:latest"
   only:
     - main
