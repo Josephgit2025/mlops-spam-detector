@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: spam-detector
-          image: docker.io/josephmariebile/spam-detector:latest
+          image: josephmariebile/spam-detector:dacb2853d9a9fe88977f1a0f9fdc02ecbb8ec205
           ports:
             - containerPort: 8000
           envFrom:
