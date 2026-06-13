@@ -210,6 +210,9 @@ root-app                → surveille argocd/
   └── spam-detector-training → déploie k8s/training/
 ```
 
+### ArgoCD — GitOps Deployment
+![ArgoCD Apps](docs/screenshots/argocd.png)
+
 ---
 
 ## Lancer le projet en local
@@ -254,6 +257,9 @@ Réponse :
   "confidence": 0.9234
 }
 ```
+
+### MLflow — Experiment Tracking
+![MLflow Run](docs/screenshots/mlflow-run.png)
 
 ---
 
