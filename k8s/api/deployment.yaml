@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: spam-detector
-          image: josephmariebile/spam-detector:b8ce26c35a2bc01d18d8aab6210af0fb91991ffc
+          image: josephmariebile/spam-detector:0bda7a81ac3d87e8457ad181b1118c08af446f22
           ports:
             - containerPort: 8000
           envFrom:
