@@ -25,6 +25,20 @@ resource "digitalocean_kubernetes_cluster" "spam" {
     }
 }
 
+resource "digitalocean_database_cluster" "mlflow_db" {
+  name       = "mlflow-postgres"
+  engine     = "pg"
+  version    = "15"
+  size       = "db-s-1vcpu-1gb"
+  region     = var.region
+  node_count = 1
+}
+
+output "db_uri" {
+  value     = digitalocean_database_cluster.mlflow_db.uri
+  sensitive = true
+}
+
 resource "digitalocean_firewall" "mlflow" {
   name        = "mlflow-firewall"
   droplet_ids = [digitalocean_droplet.mlflow.id]

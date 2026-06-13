@@ -1,8 +1,7 @@
 ---
-
 - name: Configurer le serveur MLflow
   hosts: mlflow
-  become: true      # équivalent de sudo
+  become: true
 
   tasks:
     - name: Mettre à jour les paquets
@@ -13,28 +12,55 @@
       apt:
         name:
           - docker.io
-        state: present        # s'assure que c'est installé
+          - python3-docker
+        state: present
 
     - name: Démarrer Docker
       service:
         name: docker
         state: started
-        enabled: true     # démarre au boot
+        enabled: true
 
     - name: Installer pip
       apt:
         name: python3-pip
         state: present
 
-    - name: Lancer MLflow via Docker
+    - name: Créer un réseau Docker
+      docker_network:
+        name: mlflow-network
+
+    - name: Lancer PostgreSQL
+      docker_container:
+        name: mlflow-postgres
+        image: postgres:15
+        state: started
+        restart_policy: always
+        networks:
+          - name: mlflow-network
+        env:
+          POSTGRES_USER: mlflow
+          POSTGRES_PASSWORD: mlflow123
+          POSTGRES_DB: mlflow
+
+    - name: Attendre que PostgreSQL soit prêt
+      pause:
+        seconds: 10
+
+    - name: Lancer MLflow avec PostgreSQL DO
       docker_container:
         name: mlflow
-        image: ghcr.io/mlflow/mlflow:2.11.3
+        image: josephmariebile/mlflow-custom:latest
         state: started
-        restart_policy: always      # rédemarre si le serveur reboot
+        restart_policy: always
         ports:
           - "5000:5000"
+        env:
+          MLFLOW_BACKEND_STORE_URI: "postgresql://doadmin:<password>@mlflow-postgres-do-user-38119630-0.h.db.ondigitalocean.com:25060/defaultdb?sslmode=require"
         command: >
           mlflow server
           --host 0.0.0.0
           --port 5000
+          --allowed-hosts *
+          --backend-store-uri postgresql://doadmin:<password>@mlflow-postgres-do-user-38119630-0.h.db.ondigitalocean.com:25060/defaultdb?sslmode=require
+          --uvicorn-opts '--workers 1'
