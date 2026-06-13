@@ -1,5 +1,7 @@
 # MLOps Spam Detector
 
+![CI/CD](https://github.com/Josephgit2025/mlops-spam-detector/actions/workflows/ci.yaml/badge.svg)
+
 Pipeline MLOps complet de détection de spam par SMS — entraînement automatisé, API REST, déploiement cloud sur DigitalOcean avec Terraform, Ansible, ArgoCD et GitHub Actions.
 
 ---
@@ -50,6 +52,29 @@ MLflow Server — Droplet DigitalOcean
 ```
 
 ---
+
+## Architecture détaillée
+
+GitHub (source of truth)
+    │
+    ▼
+GitHub Actions (CI)
+    ├── train   → python src/train.py → logs métriques sur MLflow (DO Droplet)
+    ├── test    → pytest avec modèle artifact entre jobs
+    ├── build   → docker build + push Docker Hub (josephmariebile/spam-detector)
+    └── deploy  → sed sur deployment.yaml (tag = $GITHUB_SHA) + git push
+                        │
+                        ▼
+                  ArgoCD détecte le diff
+                        │
+                        ▼
+              DOKS (DigitalOcean Kubernetes)
+                  ├── spam-detector-api (Deployment + LoadBalancer)
+                  └── spam-detector-training (Job)
+                        │
+                        ▼
+              MLflow Server (Droplet Ubuntu 22.04)
+                  └── Backend PostgreSQL (DO Managed Database)
 
 ## Infrastructure as Code
 
