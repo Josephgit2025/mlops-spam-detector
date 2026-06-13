@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spam-detector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spam-detector
+  template:
+    metadata:
+      labels:
+        app: spam-detector
+    spec:
+      containers:
+        - name: spam-detector
+          image: docker.io/josephmariebile/spam-detector:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: spam-detector-config

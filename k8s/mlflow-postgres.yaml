@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mlflow-postgres
+  template:
+    metadata:
+      labels:
+        app: mlflow-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          env:
+            - name: POSTGRES_DB
+              value: mlflow
+            - name: POSTGRES_USER
+              value: mlflow
+            - name: POSTGRES_PASSWORD
+              value: mlflow123
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: mlflow-storage
+      volumes:
+        - name: mlflow-storage
+          persistentVolumeClaim:
+            claimName: mlflow-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mlflow-postgres
+spec:
+  selector:
+    app: mlflow-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP

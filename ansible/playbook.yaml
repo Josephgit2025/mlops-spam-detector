@@ -1,0 +1,40 @@
+---
+
+- name: Configurer le serveur MLflow
+  hosts: mlflow
+  become: true      # équivalent de sudo
+
+  tasks:
+    - name: Mettre à jour les paquets
+      apt:
+        update_cache: yes
+
+    - name: Installer Docker
+      apt:
+        name:
+          - docker.io
+        state: present        # s'assure que c'est installé
+
+    - name: Démarrer Docker
+      service:
+        name: docker
+        state: started
+        enabled: true     # démarre au boot
+
+    - name: Installer pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Lancer MLflow via Docker
+      docker_container:
+        name: mlflow
+        image: ghcr.io/mlflow/mlflow:2.11.3
+        state: started
+        restart_policy: always      # rédemarre si le serveur reboot
+        ports:
+          - "5000:5000"
+        command: >
+          mlflow server
+          --host 0.0.0.0
+          --port 5000

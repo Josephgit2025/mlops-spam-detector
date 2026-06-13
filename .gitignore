@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 mlruns/
 .pytest_cache/
+*.tfstate
+*.tfvars
+*tfstate.backup
+.terraform/

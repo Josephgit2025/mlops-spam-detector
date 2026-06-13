@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spam-detector-config
+data:
+  APP_TITLE: "Spam Detector API"
+  APP_ENV: "production"
+  MODEL_PATH: "models/model.pkl"
+  VECTORIZER_PATH: "models/vectorizer.pkl"
